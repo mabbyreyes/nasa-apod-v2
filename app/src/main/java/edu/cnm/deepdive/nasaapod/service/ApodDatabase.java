@@ -19,7 +19,8 @@ import java.util.Date;
     version = 1,
     exportSchema = true
 )
-@TypeConverters(Converters.class)
+
+@TypeConverters({Converters.class, Apod.MediaType.class})
 public abstract class ApodDatabase extends RoomDatabase {
 
   private static final String DB_NAME = "apod_db";
@@ -48,6 +49,7 @@ public abstract class ApodDatabase extends RoomDatabase {
 
   public static class Converters {
 
+    // dates to numbers, numbers to dates.
     @TypeConverter
     public static Long fromDate(Date date) {
       return (date != null) ? date.getTime() : null;
