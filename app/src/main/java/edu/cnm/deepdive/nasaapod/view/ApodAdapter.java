@@ -12,15 +12,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.squareup.picasso.Picasso;
 import edu.cnm.deepdive.nasaapod.R;
+import edu.cnm.deepdive.nasaapod.model.entity.Apod;
 import edu.cnm.deepdive.nasaapod.model.entity.Apod.MediaType;
 import edu.cnm.deepdive.nasaapod.model.pojo.ApodWithStats;
 import java.util.List;
-import org.w3c.dom.Text;
 
 public class ApodAdapter extends ArrayAdapter<ApodWithStats> {
 
-  public ApodAdapter(@NonNull Context context, @NonNull List<ApodWithStats> objects) {
+  private final OnClickListener listener;
+  public ApodAdapter(@NonNull Context context, @NonNull List<ApodWithStats> objects,
+      OnClickListener listener) {
     super(context, R.layout.item_apod, objects);
+    this.listener = listener; // TODO Deal with a null listener.
   }
 
   @NonNull
@@ -47,6 +50,16 @@ public class ApodAdapter extends ArrayAdapter<ApodWithStats> {
     } else {
       thumbnail.setImageResource(R.drawable.ic_slow_motion_video);
     }
+    thumbnail.setContentDescription(apod.getApod().getTitle());
+    view.setOnClickListener((v) -> listener.onClick(v, apod.getApod(), position));
     return view;
   }
+
+  @FunctionalInterface
+  public interface OnClickListener {
+
+    void onClick(View view, Apod apod, int position);
+
+  }
+
 }
